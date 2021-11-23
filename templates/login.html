@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+</head>
+<body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+  <script type="text/javascript" charset="utf-8">
+
+    let url = document.location.origin + '/'
+
+    var socket = io(url);
+    
+    socket.on('connect', function() {
+      socket.emit('conectado', 'conectado');
+    });
+
+    function getCookie(nome) {
+      var nomeCookie = nome + "=";
+      var ca = document.cookie.split(';');
+      for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+          while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nomeCookie) == 0) return c.substring(nomeCookie.length,c.length);
+        }
+            return null;
+        };
+
+      var dadosCookie = getCookie('login') 
+
+      if(dadosCookie === 'sim'){
+        window.location.href = url+'banco';
+      }
+
+    let nome = 'login';
+    let valor = 'não';
+    let validade = '';
+
+    document.cookie = nome + "=" + (valor || "")  + validade + "; path=/jogo, path=/login";
+
+    function verificar()
+    {
+      let login_ = document.getElementById('login_').value;
+      let senha_ = document.getElementById('senha_').value;
+      let boolean_login = false
+      let boolean_senha = false
+
+      if(login_ === ''){
+        alert('login está sem nada digitado')
+      } else{
+        boolean_login = true
+      }
+
+      if(senha_ === ''){
+        alert('senha está sem nada digitado')
+      } else{
+        boolean_senha = true
+      }
+      
+      if(boolean_login === true)
+      {
+        if(boolean_senha === true)
+        {   
+          socket.emit('login', {login: login_, senha: senha_});
+        }   
+      } 
+    
+    };
+
+    function Casdastro()
+    {
+      
+      window.location.href = url+'cadastro';
+
+    }
+
+    socket.on('erro', function(erro){
+        console.log(erro);
+        alert('login ou senha errado');
+    });
+
+    socket.on('login_aprovado', function(login_aprovado){
+        console.log(login_aprovado);
+        window.location.href = url+'banco';
+    });
+
+    socket.on('cookie_', function(cokie){
+
+      let nome = 'login';
+      let valor = 'sim';
+      let validade = '';
+
+      document.cookie = nome + "=" + (valor || "")  + validade + "; path=/";
+
+      var login = document.getElementById('login_').value;
+
+        nome = 'username';
+        valor = login;
+        validade = '';
+
+        document.cookie = nome + "=" + (valor || "")  + validade + "; path=/";
+
+      
+    });
+    function getCookie(nome) {
+      var nomeCookie = nome + "=";
+      var ca = document.cookie.split(';');
+      for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+          while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nomeCookie) == 0) return c.substring(nomeCookie.length,c.length);
+        }
+            return null;
+        };
+
+      var dadosCookie = getCookie('login') 
+
+      if(dadosCookie === 'sim'){
+        window.location.href = url+'banco';
+      }
+
+    </script>
+    <form >
+      <h1>Login</h1>
+      
+      <input type="text" placeholder="Insira o nome" id="login_" > <br>
+      
+      <input type="text" placeholder="Insira a senha" id="senha_"> <br>
+    </form>
+
+    <button onclick="javascript:verificar();">Entrar</button> <br>
+    <button onclick="javascript:Casdastro();">Casdastro</button>
+  
+  <script>
+    
+    document.querySelector("form").addEventListener("submit", function(event) {
+      event.preventDefault();
+    })
+  </script>
+</body>
+</html>

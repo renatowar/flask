@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dados do Dinheiro</title>
+    </head>
+    <body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+        <script type="text/javascript" charset="utf-8">
+
+            let url = document.location.origin + '/'
+            var socket = io(url);
+
+            socket.on('pegar_valor', function() {
+                socket.emit('conectado', 'conectado');
+            });
+
+            function salvar_() {
+                let Entrada = getElementById('Entrada_de_dinheiro')
+                let Saida = getElementById('saida_de_dinheiro')
+
+                if(''===''){
+
+                }
+
+
+            }
+
+        </script>
+        
+        <form>
+            <input type="text" id = 'Entrada_de_dinheiro' placeholder= 'Entrada de dinheiro'> <br>
+            <input type='text' id = 'saida_de_dinheiro' placeholder='saida de dinheiro'> <br>
+            <button onclick='javascript:salvar_();'>Salvar no sistema</button>
+        </form>
+            
+    </body>
+</html>

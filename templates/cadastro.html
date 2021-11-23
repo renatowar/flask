@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-bnr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro</title>
+  
+</head>
+  <body>
+
+    <form>
+
+      <h1>Cadastro</h1>
+      
+      <input type="text" id = 'login' placeholder="Insira o nome"> <br>
+      
+      <input type="text" id = 'senha1' placeholder="Insira a senha"> <br>
+      
+      <input type="text" id = 'senha2' placeholder="Insira a senha novamente" > <br>
+
+    </form>
+
+    <button onclick="javascript:cadastro();">Fazer Casdastro</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8">
+
+      let url = document.location.origin + '/'
+
+      function getCookie(nome) {
+          var nomeCookie = nome + "=";
+          var ca = document.cookie.split(';');
+          for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+              while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nomeCookie) == 0) return c.substring(nomeCookie.length,c.length);
+            }
+              return '';
+            };
+
+        var dadosCookie = getCookie('login') 
+
+        if(dadosCookie === 'sim'){
+          window.location.href = url+'banco';
+        }
+      
+      var socket = io(url);
+
+      socket.on('connect', function() {
+        socket.emit('conectado', 'foi');
+      });
+      
+      socket.on('cadastro_erro', function(erro){
+        console.log(erro);
+        alert('esse login já existe')
+      });
+
+      socket.on('login_aprovado_', function(login_aprovado_){
+        console.log(login_aprovado_);
+        window.location.href = url+'banco'
+      });
+
+      function cadastro(){
+        var login = document.getElementById('login').value;
+        var senha1 = document.getElementById('senha1').value;
+        var senha2 = document.getElementById('senha2').value;
+        
+        if(senha2 === senha1){
+          socket.emit('cadastro', {_login_: login, _senha_: senha1});
+        }else{
+          alert('as senhas não são iguais');
+        };
+
+      socket.on('cookie_', function(cokie){
+
+        let nome = 'login';
+        let valor = 'sim';
+        let validade = '';
+
+        document.cookie = nome + "=" + (valor || "")  + validade + "; path=/";
+
+        var login = document.getElementById('login').value;
+
+        nome = 'username';
+        valor = login;
+        validade = '';
+
+        document.cookie = nome + "=" + (valor || "")  + validade + "; path=/";
+      });
+      };
+    </script>
+
+  </body>
+</html>
