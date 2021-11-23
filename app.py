@@ -1,6 +1,6 @@
 from flask import Flask, flash, render_template
 from flask_socketio import SocketIO, emit, send
-asddddddddddddddddddddddddddddddddd
+
 app = Flask(__name__)
 socketio = SocketIO(app)
 app.config['SECRET_KEY'] = 'secret!'
