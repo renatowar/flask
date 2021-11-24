@@ -53,6 +53,15 @@ def socketio_cadastro(login_senha):
 def banco():
     return render_template('banco.html')
 
+@socketio.on('pegar_valor_da_conta')
+def pegar_valor_da_conta(username):
+    try:
+        with open(f'{username}.txt', 'r') as arquivo:
+            valor = arquivo.read()
+    except:
+        print(username)
+        pass
+
 #redirecionar 
 @app.route('/')
 def redirecionar():
@@ -64,8 +73,8 @@ def redirecionar():
     """
 
 @socketio.on('conectado')
-def conectado(msssg):
-    print(msssg)
+def conectado(msg):
+    print(msg)
 
 if __name__ == "__main__":    
     socketio.run(app, debug=True)

@@ -14,15 +14,49 @@
             let url = document.location.origin + '/'
             var socket = io(url);
 
-            socket.on('pegar_valor', function() {
-                socket.emit('conectado', 'conectado');
+            function getCookie(nome) {
+                var nomeCookie = nome + "=";
+                var ca = document.cookie.split(';');
+                for(var i=0;i < ca.length;i++) {
+                    var c = ca[i];
+                    while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                        if (c.indexOf(nomeCookie) == 0) return c.substring(nomeCookie.length,c.length);
+                    }
+                        return '';
+                    };
+
+            var username = getCookie('username')
+
+            var dadosCookie = getCookie('login') 
+
+            if(dadosCookie === 'não'){
+                window.location.href = url+'login';
+            }
+            if(dadosCookie === ''){
+                window.location.href = url+'login';
+            }
+            
+
+            socket.on('connect', function() {
+                socket.emit('pegar_valor_da_conta', username);
+            });
+
+            socket.on('pegar_valor_da_conta', function(valor_){
+                const valor = valor_
             });
 
             function salvar_() {
-                let Entrada = getElementById('Entrada_de_dinheiro')
-                let Saida = getElementById('saida_de_dinheiro')
+                let Entrada = number(getElementById('Entrada_de_dinheiro').value);
+                let Saida = number(getElementById('saida_de_dinheiro').value);
 
-                if(''===''){
+                if(Entrada > Saida){
+                    let dinheiro = Entrada - Saida 
+                    if(valor > dinheiro){
+
+                    }else{
+                    
+                    }
+                }else{
 
                 }
 
