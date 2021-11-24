@@ -39,6 +39,7 @@
 
             socket.on('connect', function() {
                 socket.emit('pegar_valor_da_conta', username);
+                socket.emit('conectado', String(Math.random(1,9999) + Math.random(1,9999)).substr(2))
             });
 
             socket.on('pegar_valor_da_conta', function(valor_){

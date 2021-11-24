@@ -12,14 +12,12 @@
 
     let url = document.location.origin + '/'
 
-    let codigo = String(Math.random() + Math.random());
+    let codigo = String(Math.random(1,9999) + Math.random(1,9999)).substr(2);
 
     var socket = io(url);
-
-    io.on("connection");
     
     socket.on('connect', function() {
-      socket.emit('conectado', 'conectado');
+      socket.emit('conectado', String(Math.random(1,9999) + Math.random(1,9999)).substr(2));
     });
 
     function getCookie(nome) {
@@ -46,7 +44,7 @@
     document.cookie = nome + "=" + (valor || "")  + validade + "; path=/jogo, path=/login";
 
     function verificar()
-    {
+    { 
       let login_ = document.getElementById('login_').value;
       let senha_ = document.getElementById('senha_').value;
       let boolean_login = false
@@ -81,32 +79,33 @@
 
     }
 
-    socket.on(`${codigo}erro`, function(erro){
-        console.log(erro);
+    socket.on(`erro`, function(codigo1){
+      console.log(codigo1)
+      console.log(codigo)
+        if(codigo1 === codigo ){
         alert('login ou senha errado');
-    });
+    }});
 
-    socket.on(`${codigo}login_aprovado`, function(login_aprovado){
-        console.log(login_aprovado);
-        window.location.href = url+'banco';
-    });
+    socket.on(`login_aprovado`, function(codigo1){
+      console.log(codigo1)
+      console.log(codigo)
+      if(codigo1 === codigo ){
+        window.location.href = document.location.origin + '/' +'banco';
 
-    socket.on(`${codigo}cookie_`, function(cokie){
-
-      let nome = 'login';
-      let valor = 'sim';
-      let validade = '';
-
-      document.cookie = nome + "=" + (valor || "")  + validade + "; path=/";
-
-      var login = document.getElementById('login_').value;
-
-        nome = 'username';
-        valor = login;
-        validade = '';
+        let nome = 'login';
+        let valor = 'sim';
+        let validade = '';
 
         document.cookie = nome + "=" + (valor || "")  + validade + "; path=/";
-    });
+
+        var login = document.getElementById('login_').value;
+
+          nome = 'username';
+          valor = login;
+          validade = '';
+
+          document.cookie = nome + "=" + (valor || "")  + validade + "; path=/";
+    }});
 
     var dadosCookie = getCookie('login') 
 

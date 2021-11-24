@@ -28,6 +28,8 @@
 
       let url = document.location.origin + '/'
 
+      let codigo = String(Math.random(1,9999) + Math.random(1,9999)).substr(2);
+
       function getCookie(nome) {
           var nomeCookie = nome + "=";
           var ca = document.cookie.split(';');
@@ -39,27 +41,42 @@
               return '';
             };
 
-        var dadosCookie = getCookie('login') 
+      var dadosCookie = getCookie('login') 
 
-        if(dadosCookie === 'sim'){
-          window.location.href = url+'banco';
-        }
+      if(dadosCookie === 'sim'){
+        window.location.href = url+'banco';
+      }
       
       var socket = io(url);
 
       socket.on('connect', function() {
-        socket.emit('conectado', 'foi');
+        socket.emit('conectado', String(Math.random(1,9999) + Math.random(1,9999)).substr(2));
       });
       
-      socket.on('cadastro_erro', function(erro){
-        console.log(erro);
+      socket.on('cadastro_erro', function(codigo1){
+        if(codigo1 === codigo){
         alert('esse login já existe')
-      });
+      }});
 
-      socket.on('login_aprovado_', function(login_aprovado_){
-        console.log(login_aprovado_);
-        window.location.href = url+'banco'
-      });
+      socket.on('login_aprovado_', function(codigo1){
+
+      if(codigo1 === codigo){
+        
+          window.location.href = url+'banco'
+          let nome = 'login';
+          let valor = 'sim';
+          let validade = '';
+
+          document.cookie = nome + "=" + (valor || "")  + validade + "; path=/";
+
+          var login = document.getElementById('login').value;
+
+          nome = 'username';
+          valor = login;
+          validade = '';
+
+          document.cookie = nome + "=" + (valor || "")  + validade + "; path=/";
+      }});
 
       function cadastro(){
         var login = document.getElementById('login').value;
@@ -67,27 +84,10 @@
         var senha2 = document.getElementById('senha2').value;
         
         if(senha2 === senha1){
-          socket.emit('cadastro', {_login_: login, _senha_: senha1});
+          socket.emit('cadastro', {_login_: login, _senha_: senha1, codigo:codigo});
         }else{
           alert('as senhas não são iguais');
         };
-
-      socket.on('cookie_', function(cokie){
-
-        let nome = 'login';
-        let valor = 'sim';
-        let validade = '';
-
-        document.cookie = nome + "=" + (valor || "")  + validade + "; path=/";
-
-        var login = document.getElementById('login').value;
-
-        nome = 'username';
-        valor = login;
-        validade = '';
-
-        document.cookie = nome + "=" + (valor || "")  + validade + "; path=/";
-      });
       };
     </script>
 

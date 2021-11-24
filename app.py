@@ -19,19 +19,17 @@ def login():
 def socketio_login(login_senha):
     senha = login_senha['senha']
     login = login_senha['login']
-    codigo = str(login_senha['codigo'])
-    print(codigo)
     try:
         with open(f'{login}.txt', 'r') as arquivo:
             senha_teste = arquivo.read()
     except:
-        socketio.emit(f'{codigo}erro', 'erro')
+        socketio.emit('erro', login_senha['codigo'])
     else:
         if senha == senha_teste:
-            socketio.emit(f'{codigo}cookie_', 'cookie')
-            socketio.emit(f'{codigo}login_aprovado', 'login aprovado')
+            socketio.emit('login_aprovado', login_senha['codigo'])   
         else:
-            socketio.emit(f'{codigo}erro', 'erro')
+            socketio.emit('erro', login_senha['codigo'])
+
 
 #cadastro
 @app.route('/cadastro')
@@ -49,10 +47,9 @@ def socketio_cadastro(login_senha):
     except:
         with open(f'{login}.txt', 'w') as arquivo:
             arquivo.write(senha)
-        socketio.emit('login_aprovado_', 'login aprovado')
-        socketio.emit('cookie_', 'cookie')
+        socketio.emit('login_aprovado_', login_senha['codigo'])
     else:
-        socketio.emit('cadastro_erro', 'erro')
+        socketio.emit('cadastro_erro', login_senha['codigo'])
 
 #banco
 @app.route('/banco')
@@ -78,8 +75,8 @@ def redirecionar():
     """
 
 @socketio.on('conectado')
-def conectado(msg):
-    print(msg)
+def conectado(codigo):
+    print(codigo)
 
 if __name__ == "__main__":    
     socketio.run(app)
