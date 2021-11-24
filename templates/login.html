@@ -12,7 +12,7 @@
 
     let url = document.location.origin + '/'
 
-    const codigo = String(Math.random() + Math.random());
+    let codigo = String(Math.random() + Math.random());
 
     var socket = io(url);
 
@@ -81,17 +81,17 @@
 
     }
 
-    socket.on(codigo+'erro', function(erro){
+    socket.on(`${codigo}erro`, function(erro){
         console.log(erro);
         alert('login ou senha errado');
     });
 
-    socket.on(codigo+'login_aprovado', function(login_aprovado){
+    socket.on(`${codigo}login_aprovado`, function(login_aprovado){
         console.log(login_aprovado);
         window.location.href = url+'banco';
     });
 
-    socket.on(codigo+'cookie_', function(cokie){
+    socket.on(`${codigo}cookie_`, function(cokie){
 
       let nome = 'login';
       let valor = 'sim';
@@ -127,7 +127,6 @@
     <button onclick="javascript:Casdastro();">Casdastro</button>
   
   <script>
-    
     document.querySelector("form").addEventListener("submit", function(event) {
       event.preventDefault();
     })
