@@ -12,7 +12,11 @@
 
     let url = document.location.origin + '/'
 
+    const codigo = String(Math.random() + Math.random());
+
     var socket = io(url);
+
+    io.on("connection");
     
     socket.on('connect', function() {
       socket.emit('conectado', 'conectado');
@@ -64,7 +68,7 @@
       {
         if(boolean_senha === true)
         {   
-          socket.emit('login', {login: login_, senha: senha_});
+          socket.emit('login', {login: login_, senha: senha_, codigo:codigo});
         }   
       } 
     
@@ -77,17 +81,17 @@
 
     }
 
-    socket.on('erro', function(erro){
+    socket.on(codigo+'erro', function(erro){
         console.log(erro);
         alert('login ou senha errado');
     });
 
-    socket.on('login_aprovado', function(login_aprovado){
+    socket.on(codigo+'login_aprovado', function(login_aprovado){
         console.log(login_aprovado);
         window.location.href = url+'banco';
     });
 
-    socket.on('cookie_', function(cokie){
+    socket.on(codigo+'cookie_', function(cokie){
 
       let nome = 'login';
       let valor = 'sim';
@@ -102,25 +106,13 @@
         validade = '';
 
         document.cookie = nome + "=" + (valor || "")  + validade + "; path=/";
-
-      
     });
-    function getCookie(nome) {
-      var nomeCookie = nome + "=";
-      var ca = document.cookie.split(';');
-      for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-          while (c.charAt(0)==' ') c = c.substring(1,c.length);
-            if (c.indexOf(nomeCookie) == 0) return c.substring(nomeCookie.length,c.length);
-        }
-            return null;
-        };
 
-      var dadosCookie = getCookie('login') 
+    var dadosCookie = getCookie('login') 
 
-      if(dadosCookie === 'sim'){
-        window.location.href = url+'banco';
-      }
+    if(dadosCookie === 'sim'){
+      window.location.href = url+'banco';
+    }
 
     </script>
     <form >
